@@ -559,7 +559,7 @@ function update_cam!(scene::Scene, camera::Camera3D, area3d::Rect)
     middle = maximum(bb) - half_width
     old_dir = normalize(eyeposition .- lookat)
     camera.lookat[] = middle
-    neweyepos = middle .+ (1.2*norm(width) .* old_dir)
+    neweyepos = middle .+ (norm(half_width) .* old_dir)
     camera.eyeposition[] = neweyepos
     camera.upvector[] = Vec3f0(0,0,1)
     if camera.attributes[:near][] === automatic
