@@ -39,10 +39,10 @@ end
 Compute a GlyphCollection for a `string` given fontsize, font, align, rotation, model, justification, and lineheight.
 """
 function layout_text(
-        string::AbstractString, fontsize::Union{AbstractVector, Number},
-        font, fonts, align, rotation, justification, lineheight, color,
-        strokecolor, strokewidth, word_wrap_width
-    )
+    string::AbstractString, fontsize::Union{AbstractVector,Number},
+    font, fonts, align, rotation, justification, lineheight, color,
+    strokecolor, strokewidth, word_wrap_width
+)
 
     ft_font = to_font(font)
     rscale = to_fontsize(fontsize)
@@ -68,13 +68,13 @@ This layout in text coordinates, relative to the anchor point [0,0] can then be 
 rotated to wherever it is needed in the plot.
 """
 function glyph_collection(
-        str::AbstractString, font_per_char, fontscale_px, halign, valign,
-        lineheight_factor, justification, rotation, color,
-        strokecolor, strokewidth, word_wrap_width
-    )
+    str::AbstractString, font_per_char, fontscale_px, halign, valign,
+    lineheight_factor, justification, rotation, color,
+    strokecolor, strokewidth, word_wrap_width
+)
 
     isempty(str) && return GlyphCollection(
-        [], [], Point3f[],FreeTypeAbstraction.FontExtent{Float32}[],
+        [], [], Point3f[], FreeTypeAbstraction.FontExtent{Float32}[],
         Vec2f[], Float32[], RGBAf[], RGBAf[], Float32[])
 
     # collect information about every character in the string
@@ -114,13 +114,13 @@ function glyph_collection(
             x += ci.extent.hadvance * ci.scale
 
             if 0 < word_wrap_width < x && last_space_local_idx != 0 &&
-                    ((ci.char in (' ', '\n')) || i == length(charinfos))
+               ((ci.char in (' ', '\n')) || i == length(charinfos))
 
                 newline_offset = xs[end][last_space_local_idx + 1]
-                push!(xs, xs[end][last_space_local_idx+1:end] .- newline_offset)
-                xs[end-1] = xs[end-1][1:last_space_local_idx]
+                push!(xs, xs[end][(last_space_local_idx + 1):end] .- newline_offset)
+                xs[end - 1] = xs[end - 1][1:last_space_local_idx]
                 push!(lineinfos, view(charinfos, last_line_start:last_space_global_idx))
-                last_line_start = last_space_global_idx+1
+                last_line_start = last_space_global_idx + 1
                 x = xs[end][end] + ci.extent.hadvance * ci.scale
 
                 # TODO Do we need to redo the metrics for newlines?
@@ -135,7 +135,7 @@ function glyph_collection(
                 push!(xs, Float32[])
                 push!(lineinfos, view(charinfos, last_line_start:i))
                 last_space_local_idx = 0
-                last_line_start = i+1
+                last_line_start = i + 1
                 x = 0f0
             elseif i == length(charinfos)
                 push!(lineinfos, view(charinfos, last_line_start:i))
@@ -270,7 +270,7 @@ function glyph_collection(
 end
 
 # function to concatenate vectors with a value between every pair
-function padded_vcat(arrs::AbstractVector{T}, fillvalue) where T <: AbstractVector{S} where S
+function padded_vcat(arrs::AbstractVector{T}, fillvalue) where T<:AbstractVector{S} where S
     n = sum(length.(arrs))
     arr = fill(convert(S, fillvalue), n + length(arrs) - 1)
 
@@ -335,7 +335,7 @@ function text_quads(atlas::TextureAtlas, position::VecTypes, gc::GlyphCollection
     return pos, char_offsets, quad_offsets, uvs, scales
 end
 
-function text_quads(atlas::TextureAtlas, position::Vector, gcs::Vector{<: GlyphCollection}, offset, transfunc, space)
+function text_quads(atlas::TextureAtlas, position::Vector, gcs::Vector{<:GlyphCollection}, offset, transfunc, space)
     ps = apply_transform(transfunc, position, space)
     pos = [to_ndim(Point3f, p, 0) for (p, gc) in zip(ps, gcs) for _ in gc.origins]
 

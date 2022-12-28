@@ -36,8 +36,8 @@ function draw_poly(scene::Scene, screen::Screen, poly, points::Vector{<:Point2})
 end
 
 # when color is a Makie.AbstractPattern, we don't need to go to Mesh
-function draw_poly(scene::Scene, screen::Screen, poly, points::Vector{<:Point2}, color::Union{Symbol, Colorant, Makie.AbstractPattern},
-        model, strokecolor, strokewidth)
+function draw_poly(scene::Scene, screen::Screen, poly, points::Vector{<:Point2}, color::Union{Symbol,Colorant,Makie.AbstractPattern},
+    model, strokecolor, strokewidth)
     space = to_value(get(poly, :space, :data))
     points = project_position.(Ref(scene), space, points, Ref(model))
     Cairo.move_to(screen.context, points[1]...)
@@ -47,7 +47,7 @@ function draw_poly(scene::Scene, screen::Screen, poly, points::Vector{<:Point2},
     Cairo.close_path(screen.context)
     if color isa Makie.AbstractPattern
         cairopattern = Cairo.CairoPattern(color)
-        Cairo.pattern_set_extend(cairopattern, Cairo.EXTEND_REPEAT);
+        Cairo.pattern_set_extend(cairopattern, Cairo.EXTEND_REPEAT)
         Cairo.set_source(screen.context, cairopattern)
     else
         Cairo.set_source_rgba(screen.context, rgbatuple(to_color(color))...)
@@ -63,7 +63,7 @@ function draw_poly(scene::Scene, screen::Screen, poly, points_list::Vector{<:Vec
     broadcast_foreach(points_list, poly.color[],
         poly.strokecolor[], poly.strokewidth[]) do points, color, strokecolor, strokewidth
 
-            draw_poly(scene, screen, poly, points, color, poly.model[], strokecolor, strokewidth)
+        draw_poly(scene, screen, poly, points, color, poly.model[], strokecolor, strokewidth)
     end
 end
 
@@ -82,7 +82,7 @@ function draw_poly(scene::Scene, screen::Screen, poly, rects::Vector{<:Rect2})
         color = to_color(color)
     elseif color isa Makie.AbstractPattern
         cairopattern = Cairo.CairoPattern(color)
-        Cairo.pattern_set_extend(cairopattern, Cairo.EXTEND_REPEAT);
+        Cairo.pattern_set_extend(cairopattern, Cairo.EXTEND_REPEAT)
     end
     strokecolor = poly.strokecolor[]
     if strokecolor isa AbstractArray{<:Number}
@@ -164,7 +164,7 @@ end
 ################################################################################
 
 function draw_plot(scene::Scene, screen::Screen,
-        band::Band{<:Tuple{<:AbstractVector{<:Point2},<:AbstractVector{<:Point2}}})
+    band::Band{<:Tuple{<:AbstractVector{<:Point2},<:AbstractVector{<:Point2}}})
 
     if !(band.color[] isa AbstractArray)
         upperpoints = band[1][]
@@ -211,7 +211,7 @@ function draw_plot(scene::Scene, screen::Screen, tric::Tricontourf)
     function draw_tripolys(polys, colornumbers, colors)
         for (i, (pol, colnum, col)) in enumerate(zip(polys, colornumbers, colors))
             polypath(screen.context, pol)
-            if i == length(colornumbers) || colnum != colornumbers[i+1]
+            if i == length(colornumbers) || colnum != colornumbers[i + 1]
                 Cairo.set_source_rgba(screen.context, rgbatuple(col)...)
                 Cairo.fill(screen.context)
             end

@@ -12,7 +12,7 @@ end
 
 function Base.size(screen::ThreeDisplay)
     # look at d.qs().clientWidth for displayed width
-    width, height = round.(Int, WGLMakie.JSServe.evaljs_value(screen.session, WGLMakie.JSServe.js"[document.querySelector('canvas').width, document.querySelector('canvas').height]"; time_out=100))
+    width, height = round.(Int, WGLMakie.JSServe.evaljs_value(screen.session, WGLMakie.JSServe.js"[document.querySelector('canvas').width, document.querySelector('canvas').height]"; time_out = 100))
     return (width, height)
 end
 
@@ -21,9 +21,12 @@ js_uuid(object) = string(objectid(object))
 
 function Base.insert!(td::ThreeDisplay, scene::Scene, plot::Combined)
     plot_data = serialize_plots(scene, [plot])
-    JSServe.evaljs_value(td.session, js"""
-        $(WGL).insert_plot($(js_uuid(scene)), $plot_data)
-    """)
+    JSServe.evaljs_value(
+        td.session,
+        js"""
+    $(WGL).insert_plot($(js_uuid(scene)), $plot_data)
+"""
+    )
     return
 end
 
@@ -33,13 +36,13 @@ function Base.delete!(td::ThreeDisplay, scene::Scene, plot::Combined)
     return
 end
 
-function all_plots_scenes(scene::Scene; scene_uuids=String[], plot_uuids=String[])
+function all_plots_scenes(scene::Scene; scene_uuids = String[], plot_uuids = String[])
     push!(scene_uuids, js_uuid(scene))
     for plot in scene.plots
         append!(plot_uuids, (js_uuid(p) for p in Makie.flatten_plots(plot)))
     end
     for child in scene.children
-        all_plots_scenes(child, plot_uuids=plot_uuids, scene_uuids=scene_uuids)
+        all_plots_scenes(child, plot_uuids = plot_uuids, scene_uuids = scene_uuids)
     end
     return scene_uuids, plot_uuids
 end
@@ -79,7 +82,7 @@ function three_display(session::Session, scene::Scene; screen_config...)
 
     width, height = size(scene)
 
-    canvas = DOM.um("canvas", tabindex="0")
+    canvas = DOM.um("canvas", tabindex = "0")
     wrapper = DOM.div(canvas)
     comm = Observable(Dict{String,Any}())
     push!(session, comm)

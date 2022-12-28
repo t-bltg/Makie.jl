@@ -15,7 +15,7 @@ macro Block(name::Symbol, body::Expr = Expr(:block))
 
     structdef = quote
         mutable struct $name <: Makie.Block
-            parent::Union{Figure, Scene, Nothing}
+            parent::Union{Figure,Scene,Nothing}
             layoutobservables::Makie.LayoutObservables{GridLayout}
             blockscene::Scene
         end
@@ -28,7 +28,7 @@ macro Block(name::Symbol, body::Expr = Expr(:block))
 
     i_forwarded_layout = findfirst(
         x -> x isa Expr && x.head == :macrocall &&
-            x.args[1] == Symbol("@forwarded_layout"),
+                 x.args[1] == Symbol("@forwarded_layout"),
         body.args
     )
     has_forwarded_layout = i_forwarded_layout !== nothing
@@ -67,7 +67,7 @@ macro Block(name::Symbol, body::Expr = Expr(:block))
             sym in ($((attrs !== nothing ? [QuoteNode(a.symbol) for a in attrs] : [])...),)
         end
 
-        function Makie.default_attribute_values(::Type{$(name)}, scene::Union{Scene, Nothing})
+        function Makie.default_attribute_values(::Type{$(name)}, scene::Union{Scene,Nothing})
             sceneattrs = scene === nothing ? Attributes() : theme(scene)
             curdeftheme = Makie.current_default_theme()
 
@@ -77,9 +77,9 @@ macro Block(name::Symbol, body::Expr = Expr(:block))
         function Makie.attribute_default_expressions(::Type{$name})
             $(
                 if attrs === nothing
-                    Dict{Symbol, String}()
+                    Dict{Symbol,String}()
                 else
-                    Dict{Symbol, String}([a.symbol => _defaultstring(a.default) for a in attrs])
+                    Dict{Symbol,String}([a.symbol => _defaultstring(a.default) for a in attrs])
                 end
             )
         end
@@ -88,8 +88,8 @@ macro Block(name::Symbol, body::Expr = Expr(:block))
             Dict(
                 $(
                     (attrs !== nothing ?
-                        [Expr(:call, :(=>), QuoteNode(a.symbol), a.docs) for a in attrs] :
-                        [])...
+                     [Expr(:call, :(=>), QuoteNode(a.symbol), a.docs) for a in attrs] :
+                     [])...
                 )
             )
         end
@@ -197,7 +197,7 @@ end
 function extract_attributes!(body)
     i = findfirst(
         (x -> x isa Expr && x.head == :macrocall && x.args[1] == Symbol("@attributes") &&
-            x.args[3] isa Expr && x.args[3].head == :block),
+                  x.args[3] isa Expr && x.args[3].head == :block),
         body.args
     )
     if i === nothing
@@ -285,7 +285,7 @@ get_top_parent(gp::GridPosition) = GridLayoutBase.top_parent(gp.layout)
 get_top_parent(gp::GridSubposition) = get_top_parent(gp.parent)
 
 function _block(T::Type{<:Block},
-        gp::Union{GridPosition, GridSubposition}, args...; kwargs...)
+    gp::Union{GridPosition,GridSubposition}, args...; kwargs...)
 
     top_parent = get_top_parent(gp)
     if top_parent === nothing
@@ -295,17 +295,17 @@ function _block(T::Type{<:Block},
     b
 end
 
-function _block(T::Type{<:Block}, fig_or_scene::Union{Figure, Scene},
-        args...; bbox = nothing, kwargs...)
+function _block(T::Type{<:Block}, fig_or_scene::Union{Figure,Scene},
+    args...; bbox = nothing, kwargs...)
 
     # first sort out all user kwargs that correspond to block attributes
     kwdict = Dict(kwargs)
-    
+
     if haskey(kwdict, :textsize)
         throw(ArgumentError("The attribute `textsize` has been renamed to `fontsize` in Makie v0.19. Please change all occurrences of `textsize` to `fontsize` or revert back to an earlier version."))
     end
 
-    attribute_kwargs = Dict{Symbol, Any}()
+    attribute_kwargs = Dict{Symbol,Any}()
     for (key, value) in kwdict
         if is_attribute(T, key)
             attribute_kwargs[key] = pop!(kwdict, key)
@@ -323,18 +323,18 @@ function _block(T::Type{<:Block}, fig_or_scene::Union{Figure, Scene},
 
     # make a final attribute dictionary using different priorities
     # for the different themes
-    attributes = Dict{Symbol, Any}()
+    attributes = Dict{Symbol,Any}()
     for (key, val) in default_attrs
         # give kwargs priority
         if haskey(attribute_kwargs, key)
             attributes[key] = attribute_kwargs[key]
-        # otherwise scene theme
+            # otherwise scene theme
         elseif haskey(typekey_scene_attrs, key)
             attributes[key] = typekey_scene_attrs[key]
-        # otherwise global theme
+            # otherwise global theme
         elseif haskey(typekey_attrs, key)
             attributes[key] = typekey_attrs[key]
-        # otherwise its the value from the type default theme
+            # otherwise its the value from the type default theme
         else
             attributes[key] = val
         end
@@ -470,7 +470,7 @@ function connect_block_layoutobservables!(@nospecialize(block), layout_width, la
     return
 end
 
-@inline function Base.setproperty!(x::T, key::Symbol, value) where T <: Block
+@inline function Base.setproperty!(x::T, key::Symbol, value) where T<:Block
     if hasfield(T, key)
         if fieldtype(T, key) <: Observable
             if value isa Observable
@@ -479,7 +479,7 @@ end
             obs = fieldtype(T, key)
             getfield(x, key)[] = convert_for_attribute(observable_type(obs), value)
         else
-        setfield!(x, key, value)
+            setfield!(x, key, value)
         end
     else
         # this will throw correctly
@@ -490,7 +490,7 @@ end
 # treat all blocks as scalars when broadcasting
 Base.Broadcast.broadcastable(l::Block) = Ref(l)
 
-function Base.show(io::IO, ::T) where T <: Block
+function Base.show(io::IO, ::T) where T<:Block
     print(io, "$T()")
 end
 

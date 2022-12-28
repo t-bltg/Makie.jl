@@ -11,7 +11,7 @@ macro compile(block)
         three_display(Session(), scene)
         JSServe.jsrender(Session(), figlike)
         s = serialize_scene(scene)
-        JSServe.serialize_binary(Session(), Dict(:data=>s))
+        JSServe.serialize_binary(Session(), Dict(:data => s))
     end
 end
 

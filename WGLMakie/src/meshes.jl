@@ -1,6 +1,6 @@
 function vertexbuffer(x, trans, space)
     pos = decompose(Point, x)
-    return apply_transform(trans,  pos, space)
+    return apply_transform(trans, pos, space)
 end
 
 function vertexbuffer(x::Observable, p)

@@ -75,7 +75,7 @@ using MakieCore: Key, @key_str, Automatic, automatic, @recipe
 using MakieCore: Pixel, px, Unit, Billboard
 using MakieCore: not_implemented_for
 import MakieCore: plot, plot!, theme, plotfunc, plottype, merge_attributes!, calculated_attributes!,
-get_attribute, plotsym, plotkey, attributes, used_attributes
+    get_attribute, plotsym, plotkey, attributes, used_attributes
 import MakieCore: arrows, heatmap, image, lines, linesegments, mesh, meshscatter, poly, scatter, surface, text, volume
 import MakieCore: arrows!, heatmap!, image!, lines!, linesegments!, mesh!, meshscatter!, poly!, scatter!, surface!, text!, volume!
 import MakieCore: convert_arguments, convert_attribute, default_theme, conversion_trait
@@ -84,7 +84,7 @@ export @L_str
 export ConversionTrait, NoConversion, PointBased, SurfaceLike, ContinuousSurface, DiscreteSurface, VolumeLike
 export Pixel, px, Unit, plotkey, attributes, used_attributes
 
-const RealVector{T} = AbstractVector{T} where T <: Number
+const RealVector{T} = AbstractVector{T} where T<:Number
 const RGBAf = RGBA{Float32}
 const RGBf = RGB{Float32}
 const NativeFont = FreeTypeAbstraction.FTFont
@@ -241,7 +241,7 @@ export mouseover, onpick, pick, Events, Keyboard, Mouse, mouse_selection, is_mou
 export ispressed, Exclusively
 export connect_screen
 export window_area, window_open, mouse_buttons, mouse_position, mouseposition_px,
-       scroll, keyboard_buttons, unicode_input, dropped_files, hasfocus, entered_window
+    scroll, keyboard_buttons, unicode_input, dropped_files, hasfocus, entered_window
 export disconnect!
 export DataInspector
 export Consume
@@ -283,7 +283,7 @@ export assetpath
 function icon()
     path = assetpath("icons")
     imgs = FileIO.load.(joinpath.(path, readdir(path)))
-    icons = map(img-> RGBA{Colors.N0f8}.(img), imgs)
+    icons = map(img -> RGBA{Colors.N0f8}.(img), imgs)
     return reinterpret.(NTuple{4,UInt8}, icons)
 end
 
@@ -295,7 +295,7 @@ function __init__()
     # Make GridLayoutBase default row and colgaps themeable when using Makie
     # This mutates module-level state so it could mess up other libraries using
     # GridLayoutBase at the same time as Makie, which is unlikely, though
-    GridLayoutBase.DEFAULT_COLGAP_GETTER[] = function()
+    GridLayoutBase.DEFAULT_COLGAP_GETTER[] = function ()
         ct = Makie.current_default_theme()
         if haskey(ct, :colgap)
             ct[:colgap][]
@@ -303,7 +303,7 @@ function __init__()
             GridLayoutBase.DEFAULT_COLGAP[]
         end
     end
-    GridLayoutBase.DEFAULT_ROWGAP_GETTER[] = function()
+    GridLayoutBase.DEFAULT_ROWGAP_GETTER[] = function ()
         ct = Makie.current_default_theme()
         if haskey(ct, :rowgap)
             ct[:rowgap][]
@@ -316,7 +316,7 @@ function __init__()
     cfg_path = joinpath(homedir(), ".config", "makie", "theme.jl")
     if isfile(cfg_path)
         @warn "The global configuration file is no longer supported." *
-        "Please include the file manually with `include(\"$cfg_path\")` before plotting."
+              "Please include the file manually with `include(\"$cfg_path\")` before plotting."
     end
 end
 
@@ -331,9 +331,9 @@ include("basic_recipes/text.jl")
 include("basic_recipes/raincloud.jl")
 include("deprecated.jl")
 
-export Arrows  , Heatmap  , Image  , Lines  , LineSegments  , Mesh  , MeshScatter  , Poly  , Scatter  , Surface  , Text  , Volume  , Wireframe
-export arrows  , heatmap  , image  , lines  , linesegments  , mesh  , meshscatter  , poly  , scatter  , surface  , text  , volume  , wireframe
-export arrows! , heatmap! , image! , lines! , linesegments! , mesh! , meshscatter! , poly! , scatter! , surface! , text! , volume! , wireframe!
+export Arrows, Heatmap, Image, Lines, LineSegments, Mesh, MeshScatter, Poly, Scatter, Surface, Text, Volume, Wireframe
+export arrows, heatmap, image, lines, linesegments, mesh, meshscatter, poly, scatter, surface, text, volume, wireframe
+export arrows!, heatmap!, image!, lines!, linesegments!, mesh!, meshscatter!, poly!, scatter!, surface!, text!, volume!, wireframe!
 
 export PointLight, EnvironmentLight, AmbientLight, SSAO
 

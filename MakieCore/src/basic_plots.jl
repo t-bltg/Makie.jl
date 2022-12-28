@@ -396,14 +396,10 @@ Plots a marker for each element in `(x, y, z)`, `(x, y)`, or `positions`.
         colormap = theme(scene, :colormap),
         colorrange = automatic,
         marker = theme(scene, :marker),
-        markersize = theme(scene, :markersize),
-
-        strokecolor = theme(scene, :markerstrokecolor),
+        markersize = theme(scene, :markersize), strokecolor = theme(scene, :markerstrokecolor),
         strokewidth = theme(scene, :markerstrokewidth),
         glowcolor = (:black, 0.0),
-        glowwidth = 0.0,
-
-        rotations = Billboard(),
+        glowwidth = 0.0, rotations = Billboard(),
         marker_offset = automatic,
         transform_marker = false, # Applies the plots transformation to marker
         distancefield = nothing,
@@ -470,7 +466,7 @@ Plots a mesh for each element in `(x, y, z)`, `(x, y)`, or `positions` (similar 
         shading = true,
         fxaa = true,
         inspectable = theme(scene, :inspectable),
-        cycle = [:color],
+        cycle = [:color]
     )
 end
 
@@ -602,7 +598,7 @@ end
     # default_theme(scene, LineSegments)
     Attributes(;
         default_theme(scene, LineSegments)...,
-        depth_shift = -1f-5,
+        depth_shift = -1f-5
     )
 end
 

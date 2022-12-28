@@ -12,7 +12,11 @@ end
 
 @testset "SVG rasterization" begin
     @test svg_isnt_rasterized(Scene())
-    @test svg_isnt_rasterized(begin f = Figure(); Axis(f[1, 1]); f end)
+    @test svg_isnt_rasterized(begin
+        f = Figure()
+        Axis(f[1, 1])
+        f
+    end)
     @test svg_isnt_rasterized(scatter(1:3))
     @test svg_isnt_rasterized(lines(1:3))
     @test svg_isnt_rasterized(heatmap(rand(5, 5)))

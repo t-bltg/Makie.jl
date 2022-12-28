@@ -10,9 +10,9 @@ if Sys.iswindows()
 elseif Sys.isapple()
     const _CoreGraphics = "CoreGraphics.framework/CoreGraphics"
     function primary_resolution()
-        dispid = ccall((:CGMainDisplayID, _CoreGraphics), UInt32,())
-        height = ccall((:CGDisplayPixelsHigh,_CoreGraphics), Int, (UInt32,), dispid)
-        width = ccall((:CGDisplayPixelsWide,_CoreGraphics), Int, (UInt32,), dispid)
+        dispid = ccall((:CGMainDisplayID, _CoreGraphics), UInt32, ())
+        height = ccall((:CGDisplayPixelsHigh, _CoreGraphics), Int, (UInt32,), dispid)
+        width = ccall((:CGDisplayPixelsWide, _CoreGraphics), Int, (UInt32,), dispid)
         return (width, height)
     end
 else
@@ -34,13 +34,13 @@ https://www.nature.com/articles/nmeth.1618?WT.ec_id=NMETH-201106
 
 function wong_colors(alpha = 1.0)
     colors = [
-        RGB(0/255, 114/255, 178/255), # blue
-        RGB(230/255, 159/255, 0/255), # orange
-        RGB(0/255, 158/255, 115/255), # green
-        RGB(204/255, 121/255, 167/255), # reddish purple
-        RGB(86/255, 180/255, 233/255), # sky blue
-        RGB(213/255, 94/255, 0/255), # vermillion
-        RGB(240/255, 228/255, 66/255), # yellow
+        RGB(0 / 255, 114 / 255, 178 / 255), # blue
+        RGB(230 / 255, 159 / 255, 0 / 255), # orange
+        RGB(0 / 255, 158 / 255, 115 / 255), # green
+        RGB(204 / 255, 121 / 255, 167 / 255), # reddish purple
+        RGB(86 / 255, 180 / 255, 233 / 255), # sky blue
+        RGB(213 / 255, 94 / 255, 0 / 255), # vermillion
+        RGB(240 / 255, 228 / 255, 66 / 255), # yellow
     ]
     @. RGBAf(red(colors), green(colors), blue(colors), alpha)
 end
@@ -98,17 +98,13 @@ const minimal_default = Attributes(
     ),
     ambient = RGBf(0.55, 0.55, 0.55),
     lightposition = :eyeposition,
-    inspectable = true,
-
-    CairoMakie = Attributes(
+    inspectable = true, CairoMakie = Attributes(
         px_per_unit = 1.0,
         pt_per_unit = 0.75,
         antialias = :best,
         visible = true,
         start_renderloop = false
-    ),
-
-    GLMakie = Attributes(
+    ), GLMakie = Attributes(
         # Renderloop
         renderloop = automatic,
         pause_renderloop = false,
@@ -133,13 +129,9 @@ const minimal_default = Attributes(
         # transparency. This should be the same for all of them (within one rendering
         # pipeline) otherwise depth "order" will be broken.
         transparency_weight_scale = 1000f0
-    ),
-
-    WGLMakie = Attributes(
+    ), WGLMakie = Attributes(
         framerate = 30.0
-    ),
-
-    RPRMakie = Attributes(
+    ), RPRMakie = Attributes(
         iterations = 200,
         resource = automatic,
         plugin = automatic,
